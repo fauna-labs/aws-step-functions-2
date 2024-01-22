@@ -45,9 +45,12 @@ jobs:
         run: |
           sam --info
 
-          sam build
+          sam build \
+          --config-file samconfig.ci.yaml
+
 
           sam deploy \
+          --config-file samconfig.ci.yaml \
           --stack-name ${{inputs.STACK_NAME }} \
           --s3-bucket ${{ vars.ARTIFACTS_BUCKET_NAME }} \
           --no-fail-on-empty-changeset \
