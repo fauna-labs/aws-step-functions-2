@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: besta-management-service
+Transform:
+  - AWS::LanguageExtensions
+  - AWS::Serverless-2016-10-31
+
+Parameters:
+  OpenWeatherBaseUrl:
+    Type: String
+  OpenWeatherAPIKey:
+    Type: String
+    NoEcho: true
+
+Resources:
+  OpenWeatherConnection:
+    Type: AWS::Events::Connection
+    Properties:
+      Name: 'openweather-connection'
+      AuthorizationType: API_KEY
+      AuthParameters:
+        ApiKeyAuthParameters:
+          ApiKeyName: Authorization
+          ApiKeyValue: !Ref OpenWeatherAPIKey
+        InvocationHttpParameters:
+          QueryStringParameters:
+            - IsValueSecret: true
+              Key: appid
+              Value: !Ref OpenWeatherAPIKey
+
+  ShouldIWearAJacketStateMachine:
+    Type: AWS::Serverless::StateMachine
+    Properties:
+      Type: STANDARD
+      DefinitionUri: ./workflows/should-i-wear-a-jacket.asl.json
+      DefinitionSubstitutions:
+        OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
+        OpenWeatherConnectionArn: !GetAtt OpenWeatherConnection.Arn
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Version: 2012-10-17
+          Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:DescribeSecret
+                - secretsmanager:GetSecretValue
+              Resource: !GetAtt OpenWeatherConnection.SecretArn
+            - Effect: Allow
+              Action:
+                - events:RetrieveConnectionCredentials
+              Resource: !GetAtt OpenWeatherConnection.Arn
+            - Effect: Allow
+              Action:
+                - states:InvokeHTTPEndpoint
+              Resource: !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:ShouldIWearAJacketStateMachine*
+              Condition:
+                StringEquals:
+                  states:HTTPMethod: GET
+                StringLike:
+                  states:HTTPEndpoint: !Ref OpenWeatherBaseUrl

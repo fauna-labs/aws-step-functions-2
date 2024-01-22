@@ -1,0 +1,32 @@
+name: Deploy to Sandbox
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      main
+
+concurrency:
+  group: ${{ github.ref_name }}
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  BRANCH_NAME: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || github.event_name == 'pull_request' && github.head_ref }}
+
+jobs:
+  predeploy-validations:
+    name: Pre-deploy validations
+    uses: ./.github/workflows/shared-pre-deploy-validations.yaml
+
+  deploy:
+    name: API Deployment
+    needs: [predeploy-validations]
+    uses: ./.github/workflows/shared-deploy.yaml
+    with:
+      ENVIRONMENT: sandbox
+      AWS_REGION: us-east-1
+      STACK_NAME: stepfunction-http-invoke
+    secrets: inherit

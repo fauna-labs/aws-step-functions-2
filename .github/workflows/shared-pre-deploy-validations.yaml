@@ -1,0 +1,13 @@
+name: Pre-deployment Validations
+
+on:
+  workflow_call:
+
+jobs:
+  eslint:
+    name: Lint SAM Template
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          sam validate --lint

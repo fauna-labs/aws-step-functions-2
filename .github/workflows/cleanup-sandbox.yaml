@@ -1,0 +1,46 @@
+name: Cleanup Sandbox
+run-name: Cleanup ${{ github.event_name == 'workflow_dispatch' && github.ref_name || github.event_name == 'delete' && github.event.ref || github.event_name == 'pull_request' && github.head_ref }} Sandbox
+
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      STACK_NAME:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: read
+
+env:
+  STACK_NAME: stepfunction-http-invoke
+
+jobs:
+  cleanup-resources:
+    name: Delete Sandbox Resources
+    runs-on: ubuntu-latest
+    environment: sandbox
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Configure AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ vars.PIPELINE_EXECUTION_ROLE }}
+          role-session-name: cleanup-stack
+          role-duration-seconds: 3600
+          role-skip-session-tagging: true
+
+      - name: Delete Stack
+        run: |
+          sam delete \
+          --stack-name ${{ env.STACK_NAME }} \
+          --region us-east-1 \
+          --no-prompts

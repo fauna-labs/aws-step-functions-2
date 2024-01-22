@@ -1,0 +1,15 @@
+version: 0.1
+default:
+  build:
+    parameters:
+      build_in_source: 'true'
+      cached: 'true'
+      parallel: 'true'
+  deploy:
+    parameters:
+      stack_name: stepfunction-http-invoke
+      capabilities: CAPABILITY_IAM
+      image_repositories: []
+      parameter_overrides:
+        - "OpenWeatherBaseUrl='{{OpenWeatherBaseUrl}}'"
+        - "OpenWeatherAPIKey='{{OpenWeatherAPIKey}}'"
