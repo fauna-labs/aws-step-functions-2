@@ -9,7 +9,7 @@
         "Authentication": {
           "ConnectionArn": "${OpenWeatherConnectionArn}"
         },
-        "ApiEndpoint": "https://api.openweathermap.org/data/2.5/weather",
+        "ApiEndpoint": "${OpenWeatherBaseUrl}",
         "QueryParameters": {
           "lat.$": "$.latitude",
           "lon.$": "$.longitude",

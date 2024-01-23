@@ -36,7 +36,6 @@ Resources:
         OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
         OpenWeatherConnectionArn: !GetAtt OpenWeatherConnection.Arn
       Policies:
-        - AWSLambdaBasicExecutionRole
         - Version: 2012-10-17
           Statement:
             - Effect: Allow
