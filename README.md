@@ -1,5 +1,4 @@
-# Call third-party endpoints from Step Functions with SAM
-Repository used as an example for the [Call APIs from Step Functions with SAM](https://andmore.dev/http-invoke-with-sam) article.
+Repository used as an example for the [Call APIs from Step Functions using SAM](https://andmore.dev/http-invoke-with-sam) article.
 
 # Deploy using the SAM CLI
 ## Clone/fork the repository
