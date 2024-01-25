@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Should I Wear A Jacket Service
 Transform:
-  - AWS::LanguageExtensions
   - AWS::Serverless-2016-10-31
 
 Parameters:

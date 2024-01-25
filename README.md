@@ -1,6 +1,19 @@
 # Call third-party endpoints from Step Functions with SAM
 Repository used as an example for the [Call APIs from Step Functions with SAM](https://andmore.dev/http-invoke-with-sam) article.
 
+# Deploy using the SAM CLI
+## Clone/fork the repository
+Clone or fork this repository and push it to your own GitHub account.
+
+## Run sam deploy command
+Run the following command replacing the api key value with yours
+```bash
+sam deploy --parameter-overrides OpenWeatherAPIKey=YOUR_API_KEY
+```
+
+Running `sam deploy --guided` will not work as expected since the OpenWeatherAPIKey parameter is set with the NoEcho attribute, for security reasons, which means it will not get saved in the samconfig.yaml.
+
+
 # Deploy in your account using the included GitHub workflows
 ## Clone/fork the repository
 Clone or fork this repository and push it to your own GitHub account.
