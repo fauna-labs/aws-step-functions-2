@@ -19,9 +19,6 @@
           "units": "imperial"
         }
       },
-      "ResultSelector": {
-        "temperature.$": "$.ResponseBody.main.temp"
-      },
       "Retry": [
         {
           "ErrorEquals": [
@@ -33,46 +30,29 @@
           "JitterStrategy": "FULL"
         }
       ],
-      "Next": "What Should I Wear?"
+      "Next": "Fauna Results"
     },
-    "What Should I Wear?": {
-      "Type": "Choice",
-      "Choices": [
+    "Fauna Results": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:us-east-1:896655362572:function:faunaResult:$LATEST"
+      },
+      "Retry": [
         {
-          "And": [
-            {
-              "Variable": "$.temperature",
-              "NumericGreaterThanEquals": 55
-            },
-            {
-              "Variable": "$.temperature",
-              "NumericLessThan": 70
-            }
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
           ],
-          "Next": "Light Jacket"
-        },
-        {
-          "Variable": "$.temperature",
-          "NumericGreaterThanEquals": 70,
-          "Next": "No Jacket"
-        },
-        {
-          "Variable": "$.temperature",
-          "NumericLessThan": 55,
-          "Next": "Warm Jacket"
+          "IntervalSeconds": 1,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
         }
-      ]
-    },
-    "Light Jacket": {
-      "Type": "Pass",
-      "End": true
-    },
-    "No Jacket": {
-      "Type": "Pass",
-      "End": true
-    },
-    "Warm Jacket": {
-      "Type": "Pass",
+      ],
       "End": true
     }
   }
