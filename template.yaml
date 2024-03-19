@@ -26,6 +26,22 @@ Resources:
               Key: appid
               Value: !Ref OpenWeatherAPIKey
 
+  computeResult:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs20.x # Specify your desired runtime
+      CodeUri: result/
+      Description: A Lambda function to compute the result based on weather data.
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /compute
+            Method: post
+  
   ShouldIWearAJacketStateMachine:
     Type: AWS::Serverless::StateMachine
     Properties:
@@ -34,6 +50,7 @@ Resources:
       DefinitionSubstitutions:
         OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
         OpenWeatherConnectionArn: !GetAtt OpenWeatherConnection.Arn
+        ComputeResultFunctionArn: !GetAtt computeResult.Arn
       Policies:
         - Version: 2012-10-17
           Statement:
@@ -55,3 +72,7 @@ Resources:
                   states:HTTPMethod: POST
                 StringLike:
                   states:HTTPEndpoint: !Ref OpenWeatherBaseUrl
+            - Effect: Allow
+              Action:
+                - lambda:InvokeFunction
+              Resource: !GetAtt computeResult.Arn
