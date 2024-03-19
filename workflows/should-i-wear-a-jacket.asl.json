@@ -1,11 +1,11 @@
 {
-  "StartAt": "Get Temperature",
+  "StartAt": "Query FaunaDB",
   "States": {
-    "Get Temperature": {
+    "Query FaunaDB": {
       "Type": "Task",
       "Resource": "arn:aws:states:::http:invoke",
       "Parameters": {
-        "Method": "GET",
+        "Method": "POST",
         "Authentication": {
           "ConnectionArn": "${OpenWeatherConnectionArn}"
         },

@@ -14,7 +14,7 @@ Resources:
   OpenWeatherConnection:
     Type: AWS::Events::Connection
     Properties:
-      Name: 'openweather-connection'
+      Name: 'fauna-connection'
       AuthorizationType: API_KEY
       AuthParameters:
         ApiKeyAuthParameters:
@@ -49,9 +49,9 @@ Resources:
             - Effect: Allow
               Action:
                 - states:InvokeHTTPEndpoint
-              Resource: !Sub arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:ShouldIWearAJacketStateMachine*
+              Resource: "*"
               Condition:
                 StringEquals:
-                  states:HTTPMethod: GET
+                  states:HTTPMethod: POST
                 StringLike:
                   states:HTTPEndpoint: !Ref OpenWeatherBaseUrl
