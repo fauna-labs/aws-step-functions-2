@@ -37,8 +37,8 @@ jobs:
       - name: Replace Variables in samconfig
         run: |
           npm i -g replace-in-files-cli
-          replace-in-files --string='{{OpenWeatherAPIKey}}' --replacement='${{ secrets.OpenWeatherAPIKey }}' ./samconfig.ci.yaml
-          replace-in-files --string='{{OpenWeatherBaseUrl}}' --replacement='${{ vars.OpenWeatherBaseUrl }}' ./samconfig.ci.yaml
+          replace-in-files --string='{{FaunaDBSecretKey}}' --replacement='${{ secrets.FaunaDBSecretKey }}' ./samconfig.ci.yaml
+          replace-in-files --string='{{FaunaDBSecretKey}}' --replacement='${{ vars.FaunaDBSecretKey }}' ./samconfig.ci.yaml
           cat ./samconfig.ci.yaml
 
       - name: SAM Build and Deploy

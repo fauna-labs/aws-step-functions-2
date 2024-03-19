@@ -6,7 +6,7 @@ Transform:
 Parameters:
   OpenWeatherBaseUrl:
     Type: String
-  OpenWeatherAPIKey:
+  FaunaDBSecretKey:
     Type: String
     NoEcho: true
 
@@ -19,12 +19,12 @@ Resources:
       AuthParameters:
         ApiKeyAuthParameters:
           ApiKeyName: Authorization
-          ApiKeyValue: !Ref OpenWeatherAPIKey
+          ApiKeyValue: !Ref FaunaDBSecretKey
         InvocationHttpParameters:
           QueryStringParameters:
             - IsValueSecret: true
               Key: appid
-              Value: !Ref OpenWeatherAPIKey
+              Value: !Ref FaunaDBSecretKey
 
   computeResult:
     Type: AWS::Serverless::Function
