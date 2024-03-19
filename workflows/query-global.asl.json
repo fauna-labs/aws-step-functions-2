@@ -10,6 +10,9 @@
           "ConnectionArn": "${OpenWeatherConnectionArn}"
         },
         "ApiEndpoint": "${OpenWeatherBaseUrl}",
+        "RequestBody": {
+          "query": "Inventory.byId(373089458040340557)"
+        },
         "QueryParameters": {
           "lat.$": "$.latitude",
           "lon.$": "$.longitude",

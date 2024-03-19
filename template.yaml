@@ -30,7 +30,7 @@ Resources:
     Type: AWS::Serverless::StateMachine
     Properties:
       Type: STANDARD
-      DefinitionUri: ./workflows/should-i-wear-a-jacket.asl.json
+      DefinitionUri: ./workflows/query-global.asl.json
       DefinitionSubstitutions:
         OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
         OpenWeatherConnectionArn: !GetAtt OpenWeatherConnection.Arn
