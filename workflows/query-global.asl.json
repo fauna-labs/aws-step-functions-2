@@ -9,7 +9,7 @@
         "Authentication": {
           "ConnectionArn": "${FaunaConnectionArn}"
         },
-        "ApiEndpoint": "${OpenWeatherBaseUrl}",
+        "ApiEndpoint": "${FaunaDbUrl}",
         "RequestBody": {
           "query": "Inventory.byId(373089458040340557)"
         }

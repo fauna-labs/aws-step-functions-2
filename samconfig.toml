@@ -5,5 +5,5 @@ resolve_s3 = true
 s3_prefix = "meapp2"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "OpenWeatherBaseUrl=\"https://db.fauna.com/query/1\""
+parameter_overrides = "FaunaDbUrl=\"https://db.fauna.com/query/1\""
 image_repositories = []

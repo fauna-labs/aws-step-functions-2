@@ -4,7 +4,7 @@ Transform:
   - AWS::Serverless-2016-10-31
 
 Parameters:
-  OpenWeatherBaseUrl:
+  FaunaDbUrl:
     Type: String
   FaunaDBSecretKey:
     Type: String
@@ -48,7 +48,7 @@ Resources:
       Type: STANDARD
       DefinitionUri: ./workflows/query-global.asl.json
       DefinitionSubstitutions:
-        OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
+        FaunaDbUrl: !Ref FaunaDbUrl
         FaunaConnectionArn: !GetAtt FaunaConnection.Arn
         ComputeResultFunctionArn: !GetAtt computeResult.Arn
       Policies:
@@ -71,7 +71,7 @@ Resources:
                 StringEquals:
                   states:HTTPMethod: POST
                 StringLike:
-                  states:HTTPEndpoint: !Ref OpenWeatherBaseUrl
+                  states:HTTPEndpoint: !Ref FaunaDbUrl
             - Effect: Allow
               Action:
                 - lambda:InvokeFunction
