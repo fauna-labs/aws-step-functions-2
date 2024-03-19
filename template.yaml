@@ -11,10 +11,10 @@ Parameters:
     NoEcho: true
 
 Resources:
-  OpenWeatherConnection:
+  FaunaConnection:
     Type: AWS::Events::Connection
     Properties:
-      Name: 'fauna-connection'
+      Name: 'fauna-connection-2'
       AuthorizationType: API_KEY
       AuthParameters:
         ApiKeyAuthParameters:
@@ -30,7 +30,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
-      Runtime: nodejs20.x # Specify your desired runtime
+      Runtime: nodejs20.x
       CodeUri: result/
       Description: A Lambda function to compute the result based on weather data.
       Architectures:
@@ -49,7 +49,7 @@ Resources:
       DefinitionUri: ./workflows/query-global.asl.json
       DefinitionSubstitutions:
         OpenWeatherBaseUrl: !Ref OpenWeatherBaseUrl
-        OpenWeatherConnectionArn: !GetAtt OpenWeatherConnection.Arn
+        FaunaConnectionArn: !GetAtt FaunaConnection.Arn
         ComputeResultFunctionArn: !GetAtt computeResult.Arn
       Policies:
         - Version: 2012-10-17
@@ -58,11 +58,11 @@ Resources:
               Action:
                 - secretsmanager:DescribeSecret
                 - secretsmanager:GetSecretValue
-              Resource: !GetAtt OpenWeatherConnection.SecretArn
+              Resource: !GetAtt FaunaConnection.SecretArn
             - Effect: Allow
               Action:
                 - events:RetrieveConnectionCredentials
-              Resource: !GetAtt OpenWeatherConnection.Arn
+              Resource: !GetAtt FaunaConnection.Arn
             - Effect: Allow
               Action:
                 - states:InvokeHTTPEndpoint
